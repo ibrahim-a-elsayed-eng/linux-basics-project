@@ -1,32 +1,67 @@
-# Project 4: Network, Services and Health
+# 🌐 Project 4: Network, Services & System Health (`sysdash`) | الشبكات والخدمات ومراقبة صحة النظام
 
-Linux Level 4 project (NextWork). I explored networking, services and system health from the terminal, then automated it in a bash script.
+> Prepared & Documented by: **إبراهيم أحمد السيد (Ibrahim Ahmed Elsayed)** — Cloud & DevOps Engineering Journey.
 
-## What is inside
-- `sysdash/healthcheck.sh`: prints a health report (uptime, memory, disk, top 5 processes, network check, SSH status, listening ports)
-- `sysdash/health-report.txt`: a saved report
-- `challenges.md`: problems I hit and how I fixed them
+---
 
-## Run it
-    cd sysdash
-    ./healthcheck.sh
+## 🌟 Overview / نظرة عامة
+- **EN:** This project explores Linux networking, system daemons (`systemd`), open port auditing (`ss`), and automated server health reporting (`sysdash`) from the command line.
+- **AR:** يستكشف هذا المشروع شبكات لينكس، وإدارة خدمات النظام الخلفية (`systemd`)، وفحص المنافذ المفتوحة (`ss`)، وأتمتة تقارير صحة الخادم (`sysdash`) عبر سطر الأوامر.
 
-## Tools used
-curl, ss, systemctl, journalctl, df, du, lsblk, free, uptime, ssh
+---
 
-## Mini challenges
-- `curl -I` on GitHub vs Google: server is `github.com` vs `gws`; both are text/html, but charset differs (utf-8 vs ISO-8859-1).
-- Curling closed ports gives "Connection refused"; port 53 gives "Empty reply" because it speaks DNS, not HTTP.
-- Stopping cups closed port 631; starting it brought the port back.
-- Found the biggest items in home with `du -sh ~/* | sort -h | tail -5`.
-- Connected to my own machine with `ssh localhost`.
+## 🎯 Objectives / الأهداف
+- **EN:**
+  - Manage system services and inspect daemon logs using `systemctl` and `journalctl`.
+  - Audit active listening ports and network sockets using `ss -tuln` and `curl -I`.
+  - Analyze disk and memory bottlenecks using `df -h`, `du -sh`, `lsblk`, and `free -h`.
+  - Build an automated system health dashboard script (`sysdash`).
+- **AR:**
+  - إدارة خدمات النظام وفحص سجلاتها باستخدام `systemctl` و `journalctl`.
+  - تدقيق المنافذ المفتوحة واتصالات الشبكة باستخدام `ss -tuln` و `curl -I`.
+  - تحليل استهلاك القرص والذاكرة باستخدام `df -h`, `du -sh`, `lsblk`, و `free -h`.
+  - بناء سكربت لوحة مراقبة مؤتمتة لصحة الخادم (`sysdash`).
 
-## What I learned
-- A port is a numbered door a service listens on.
-- A service (daemon) runs in the background and systemctl controls it.
-- "Connection refused" means nothing is listening on that port.
-- A script can combine many commands into one report.
+---
 
-## Project Link
+## 🛠️ Technologies Used / التقنيات المستخدمة
+- **EN:** OS: `Ubuntu Linux (WSL)` | Service Manager: `systemd` | Networking: `ss`, `curl`, `ssh` | Storage/Health: `df`, `du`, `free`, `uptime`
+- **AR:** نظام التشغيل: `Ubuntu Linux (WSL)` | مدير الخدمات: `systemd` | الشبكات: `ss`, `curl`, `ssh` | الفحص الصحي: `df`, `du`, `free`, `uptime`
 
-NextWork: https://nextwork.ai/refreshed_olive_vibrant_plum/docs/9dc8053e-07e2-4a55-ac13-b90e9520d20b
+---
+
+## ⚙️ Commands Used / الأوامر المستخدمة
+`systemctl status`, `journalctl -u`, `ss -tuln`, `curl -I`, `df -h`, `du -sh ~/* | sort -h | tail -5`, `lsblk`, `free -h`, `uptime`
+
+---
+
+## 💡 Key Learnings / الدروس المستفادة الرئيسية
+1. **EN:** A network port is a logical door where a daemon listens for incoming traffic. / **AR:** المنفذ الشبكي (`Port`) هو البوابة المنطقية التي تستمع من خلالها الخدمة للاتصالات الواردة.
+2. **EN:** `Connection refused` indicates no active daemon is listening on the target port. / **AR:** رسالة `Connection refused` تعني عدم وجود خدمة نشطة تستمع على هذا المنفذ حالياً.
+3. **EN:** Chaining `du -sh` with `sort -h` and `tail` pinpoints disk space hogs in seconds. / **AR:** ربط أوامر `du -sh` مع `sort -h` و `tail` يحدد أكبر الملفات المستهلكة للقرص خلال ثوانٍ.
+4. **EN:** Combining network and resource checks into a single Bash script accelerates incident triage. / **AR:** دمج فحوصات الشبكة والموارد في سكربت واحد يسرّع تشخيص الأعطال.
+
+---
+
+## ⚠️ Challenges & Solutions / التحديات والحلول
+
+| Challenge (المشكلة) | Solution (الحل المقترح) |
+|---|---|
+| **EN:** Port 53 returned `Empty reply from server` with `curl`<br>**AR:** المنفذ 53 أعطى رداً فارغاً عند فحصه بأمر `curl` | **EN:** Identified that Port 53 speaks `DNS` protocol, not `HTTP`.<br>**AR:** التحقق من أن المنفذ 53 يعمل ببروتوكول `DNS` وليس بروتوكول `HTTP`. |
+| **EN:** Locating directories consuming excessive disk space<br>**AR:** صعوبة تحديد المجلدات الأكثر استهلاكاً لمساحة القرص | **EN:** Used pipeline `du -sh ~/* \| sort -h \| tail -5` to rank top consumers.<br>**AR:** استخدام أنبوب الأوامر `du -sh` مع `sort -h` لترتيب أكبر المجلدات حجماً. |
+| **EN:** Service failing silently in the background<br>**AR:** توقف خدمة خلفية دون رسالة خطأ ظاهرة | **EN:** Inspected daemon state and logs via `systemctl status` and `journalctl`.<br>**AR:** فحص حالة الخدمة وسجلاتها التفصيلية عبر `systemctl status` و `journalctl`. |
+
+---
+
+## ☁️ Why It Matters for Cloud Engineers / لماذا يهم هذا مهندسي السحابة؟
+- **EN:** Cloud engineers continuously verify `AWS EC2` health checks, security group ports, and daemon uptime to guarantee high availability (`SLA`).
+- **AR:** يعتمد مهندسو السحابة يومياً على فحص صحة خوادم `AWS EC2` ومنافذ الشبكة واستمرارية عمل الخدمات لضمان التوافر العالي (`High Availability`).
+
+---
+
+## 🔗 Project & Resource Links / روابط المشروع والمرجع
+- **NextWork Reference:** [NextWork Level 4: Network, Services & Health](https://nextwork.ai/refreshed_olive_vibrant_plum/docs/9dc8053e-07e2-4a55-ac13-b90e9520d20b)
+- **GitHub Repository:** [Hisoka Cloud & DevOps Portfolio](https://github.com/ibrahim-a-elsayed-eng)
+
+---
+*Documented and verified with precision by Ibrahim Ahmed Elsayed.*

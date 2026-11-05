@@ -1,52 +1,67 @@
-# 🐧 Linux Basics & Workspace Provisioning | مشروع أساسيات لينكس
+# 🐧 Project 1: Linux Basics & Workspace Provisioning | أساسيات لينكس وتجهيز مساحة العمل
 
-[![Linux](https://img.shields.io/badge/OS-Linux%20Ubuntu%20WSL-orange?style=for-the-badge&logo=linux)](https://ubuntu.com/wsl)
-[![Bash](https://img.shields.io/badge/Shell-Bash-green?style=for-the-badge&logo=gnu-bash)](https://www.gnu.org/software/bash/)
-[![DevOps](https://img.shields.io/badge/Cloud-DevOps%20Journey-blue?style=for-the-badge&logo=amazonaws)](https://aws.amazon.com/)
-
-Welcome to the **Linux Basics & Workspace Provisioning** repository! This project documents my foundational hands-on labs and command-line mastery as part of my journey to become a professional Cloud & DevOps Engineer.
+> Prepared & Documented by: **إبراهيم أحمد السيد (Ibrahim Ahmed Elsayed)** — Cloud & DevOps Engineering Journey.
 
 ---
 
-## 🚀 Overview & Objectives
-As a Cloud Engineer, interacting with headless Linux servers via SSH and CLI is an everyday necessity. This project focuses on:
-- **Filesystem Navigation & Structure:** Mastering absolute and relative paths (\pwd\, \ls\, \cd\).
-- **File & Directory Management:** Efficient creation, moving, copying, and cleanup (\mkdir\, \cp\, \mv\, \m\).
-- **Text Processing & Filtering:** Extracting logs and data using \grep\, \cat\, \head\, and \	ail\.
-- **Permissions & Security:** Managing file ownership and access rights (\chmod\, \chown\).
+## 🌟 Overview / نظرة عامة
+- **EN:** This project covers core Linux CLI operations, workspace provisioning, file management, and text processing using utilities like `grep`, `cat`, `head`, and `tail`.
+- **AR:** يغطي هذا المشروع العمليات الأساسية لسطر أوامر لينكس (`Linux CLI`)، وتجهيز مساحة العمل، إدارة الملفات، ومعالجة النصوص باستخدام أدوات مثل `grep`, `cat`, `head`, و `tail`.
 
 ---
 
-## 🛠️ Key Linux Commands Practiced
-| Category | Commands | Description |
-| :--- | :--- | :--- |
-| **Navigation** | \pwd\, \ls\, \cd\ | Exploring directories and checking current paths. |
-| **File Ops** | \mkdir\, \cp\, \mv\, \	ouch\ | Creating and organizing project structures. |
-| **Text Filtering** | \cat\, \grep\, \head\, \	ail\ | Searching logs and viewing file contents. |
-| **System Info** | \	op\, \df\, \ree\, \uname\ | Monitoring system health and resources. |
+## 🎯 Objectives / الأهداف
+- **EN:** 
+  - Master Linux navigation and file operations.
+  - Organize project workspace effectively.
+  - Practice text filtering and command chaining.
+  - Build a solid foundation for cloud and DevOps work.
+- **AR:**
+  - إتقان التنقل في نظام لينكس وإدارة الملفات.
+  - تنظيم مساحة عمل المشروع بكفاءة.
+  - التدرب على تصفية النصوص وتسلسل الأوامر.
+  - بناء أساس قوي لأعمال السحابة وعمليات التطوير (`DevOps`).
 
 ---
 
-## 💡 Key Learnings & Takeaways
-1. **Precision in CLI:** Understanding how to avoid syntax errors and navigate complex directory trees swiftly.
-2. **Log Analysis:** Using \grep\ combined with pipes (\|\) to filter massive log files in seconds—crucial for cloud troubleshooting.
-3. **Workspace Organization:** Structuring projects cleanly with \README.md\ and dedicated challenge notes for future automation.
+## 🛠️ Technologies Used / التقنيات المستخدمة
+- **EN:** OS: `Ubuntu Linux` | Scripting: `Bash` | Tools: `CLI Utilities`
+- **AR:** نظام التشغيل: `Ubuntu Linux` | لغة السكربتات: `Bash` | الأدوات: أدوات سطر الأوامر.
 
 ---
 
-## 📁 Repository Structure
-\01-linux-basics/
-├── README.md             # Project documentation (this file)
-├── challenges.md         # Troubleshooting notes & solutions
-├── commands-used.md      # Quick reference command sheet
-├── day1.txt              # Day 1 lab notes
-├── day2.txt              # Day 2 lab notes
-├── day3.txt              # Day 3 lab notes
-└── notes/                # Additional research & study logs
-\
+## ⚙️ Commands Used / الأوامر المستخدمة
+`pwd`, `ls`, `mkdir`, `cd`, `cp`, `mv`, `cat`, `grep`, `head`, `tail`, `find`, `chmod`, `chown`, `clear`
+
 ---
 
-## 👨‍💻 Author
-**Ibrahim Ahmed Elsayed (Hisoka)**  
-- Cloud & DevOps Engineer  
-- GitHub: [ibrahim-a-elsayed-eng](https://github.com/ibrahim-a-elsayed-eng)
+## 💡 Key Learnings / الدروس المستفادة الرئيسية
+1. **EN:** Linux filesystem structure and navigation. / **AR:** هيكل نظام ملفات لينكس وطريقة التنقل فيه.
+2. **EN:** Safe file management using `cp` and `mv`. / **AR:** الإدارة الآمنة للملفات باستخدام `cp` و `mv`.
+3. **EN:** Advanced text processing with `grep` and pipes. / **AR:** معالجة النصوص المتقدمة باستخدام `grep` والأنابيب (`pipes`).
+4. **EN:** Workspace organization for peak productivity. / **AR:** تنظيم مساحة العمل لتحقيق أقصى إنتاجية.
+
+---
+
+## ⚠️ Challenges & Solutions / التحديات والحلول
+
+| Challenge (المشكلة) | Solution (الحل المقترح) |
+|---|---|
+| **EN:** Wrong directory path<br>**AR:** مسار الدليل الخاطئ | **EN:** Use `pwd` to verify current location.<br>**AR:** استخدام أمر `pwd` للتحقق من الموقع الحالي. |
+| **EN:** Large command output overflow<br>**AR:** تدفق مخرجات الأوامر الكبيرة | **EN:** Filter output using `grep`, `head`, and `tail`.<br>**AR:** تصفية المخرجات باستخدام `grep`, `head`, و `tail`. |
+| **EN:** File permission issues<br>**AR:** مشاكل صلاحيات الملفات | **EN:** Fix permissions using `chmod` and `chown`.<br>**AR:** تصحيح الصلاحيات باستخدام `chmod` و `chown`. |
+
+---
+
+## ☁️ Why It Matters for Cloud Engineers / لماذا يهم هذا مهندسي السحابة؟
+- **EN:** Every cloud engineer interacts with Linux servers daily (`AWS EC2`). Automation relies heavily on shell scripting.
+- **AR:** يتعامل كل مهندس سحابي مع خوادم لينكس يومياً عبر (`AWS EC2`)، كما تعتمد الأتمتة بشكل أساسي على سكريبتات الشل.
+
+---
+
+## 🔗 Project & Resource Links / روابط المشروع والمرجع
+- **NextWork Reference:** [NextWork Project Document](https://nextwork.ai/refreshed_olive_vibrant_plum/docs/3d26053b-1b92-4c78-b105-95e1a4b32c2a)
+- **GitHub Repository:** [Linux Basics Project Repository](https://github.com/ibrahim-a-elsayed-eng/linux-basics-project)
+
+---
+*Documented and verified with precision by Ibrahim Ahmed Elsayed.*

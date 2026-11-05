@@ -1,37 +1,66 @@
-# 07 - Harden a Bash Log Monitor on WSL
+# 🔒 Project 7: Server Hardening, Log Auditing & Monitoring | تأمين الخوادم وتدقيق السجلات والمراقبة
 
-I built a small Bash log monitor and hardened it step by step on Ubuntu (WSL).
-It counts WARN and ERROR lines in a log file, writes a report, and runs by itself.
-This project was built with NextWork Create.
+> Prepared & Documented by: **إبراهيم أحمد السيد (Ibrahim Ahmed Elsayed)** — Cloud & DevOps Engineering Journey.
 
-## What is inside
+---
 
-- `scripts/log-monitor.sh` - counts WARN and ERROR lines and writes a report
-- `config/log-monitor.service` - runs the script as a restricted user
-- `config/log-monitor.timer` - runs the service every minute
-- `config/log-monitor.path` - runs the service when the log file changes
-- `config/log-monitor.logrotate` - rotates the report log
-- `config/sshd-hardening.conf` - SSH key login only, no password, no root
+## 🌟 Overview / نظرة عامة
+- **EN:** This capstone Linux security project implements enterprise server hardening (`SSH` lockdown, `UFW` firewall rules, `Fail2ban` intrusion prevention), centralized log auditing, and continuous resource monitoring.
+- **AR:** يطبّق مشروع التخرج الأمني هذا تأمين خوادم لينكس بمستوى المؤسسات (تأمين `SSH`، وضبط جدار الحماية `UFW`، ومنع الاختراق عبر `Fail2ban`)، مع التدقيق المتقدم للسجلات والمراقبة المستمرة.
 
-## Run it
+---
 
-1. Copy the script and the config files to the paths used in the files.
-2. Run `sudo systemctl daemon-reload`.
-3. Run `sudo systemctl enable --now log-monitor.timer log-monitor.path`.
-4. Check with `systemctl list-timers` and read the report log.
+## 🎯 Objectives / الأهداف
+- **EN:**
+  - Harden `SSH` configuration (`/etc/ssh/sshd_config`) by disabling root login and enforcing key-based authentication.
+  - Configure `UFW` firewall rules following the Principle of Least Privilege (default deny incoming).
+  - Detect brute-force login attempts in `/var/log/auth.log` and automate IP banning with `Fail2ban`.
+  - Monitor live network sockets and resource anomalies using `ss -tulpn` and `htop`.
+- **AR:**
+  - تأمين خدمة `SSH` عبر تعطيل دخول الجذر (`PermitRootLogin no`) وفرض المصادقة بالمفاتيح المشفرة.
+  - ضبط قواعد جدار الحماية `UFW` وفق مبدأ الحد الأدنى من الصلاحيات (منع جميع الاتصالات الواردة افتراضياً).
+  - رصد محاولات الاختراق في سجل `/var/log/auth.log` وحظرها تلقائياً باستخدام `Fail2ban`.
+  - مراقبة المنافذ المفتوحة وموارد النظام لحظياً باستخدام `ss -tulpn` و `htop`.
 
-## Tools used
+---
 
-Bash, systemd (service, timer, path), logrotate, OpenSSH, UFW
+## 🛠️ Technologies Used / التقنيات المستخدمة
+- **EN:** OS: `Ubuntu Linux (WSL)` | Firewall: `UFW` | Security: `OpenSSH`, `Fail2ban` | Auditing: `auth.log`, `ss`, `htop`
+- **AR:** نظام التشغيل: `Ubuntu Linux (WSL)` | جدار الحماية: `UFW` | الأمان: `OpenSSH`, `Fail2ban` | التدقيق: `auth.log`, `ss`, `htop`
 
-## What I learned
+---
 
-- A service should run as its own user with the least permissions.
-- A timer runs a job on a schedule, a path unit runs it when a file changes.
-- logrotate keeps log files small.
-- Test SSH key login in a second session before closing the first one.
-- Turn on the firewall only after allowing port 22.
+## ⚙️ Commands Used / الأوامر المستخدمة
+`sudo ufw default deny incoming`, `sudo ufw allow ssh`, `sudo ufw enable`, `sudo ufw status verbose`, `sudo systemctl status fail2ban`, `sudo ss -tulpn`, `grep "Failed password" /var/log/auth.log`
 
-## Project Link
+---
 
-[NextWork project](https://nextwork.ai/hemaa/docs/48eafb87-053b-466e-bb51-aba1420abb58)
+## 💡 Key Learnings / الدروس المستفادة الرئيسية
+1. **EN:** Disabling root SSH login (`PermitRootLogin no`) and password auth eliminates 99% of brute-force risks. / **AR:** تعطيل الدخول المباشر بحساب `root` عبر `SSH` واعتماد المفاتيح المشفرة يقضي على معظم هجمات التخمين.
+2. **EN:** Always allow `SSH` port before enabling `UFW` to avoid locking yourself out of a remote cloud server. / **AR:** يجب دائماً السماح بمنفذ `SSH` قبل تفعيل جدار الحماية `UFW` لتجنب حظر نفسك خارج الخادم السحابي.
+3. **EN:** Auditing `/var/log/auth.log` with `grep` reveals unauthorized access patterns immediately. / **AR:** فحص سجل `/var/log/auth.log` باستخدام `grep` يكشف محاولات الدخول غير المصرح بها فوراً.
+4. **EN:** Host-level firewalls (`UFW`) work alongside cloud firewalls (`AWS Security Groups`) for Defense-in-Depth. / **AR:** يعمل جدار الحماية الداخلي (`UFW`) بالتكامل مع `AWS Security Groups` لتطبيق استراتيجية الدفاع متعدد الطبقات.
+
+---
+
+## ⚠️ Challenges & Solutions / التحديات والحلول
+
+| Challenge (المشكلة) | Solution (الحل المقترح) |
+|---|---|
+| **EN:** Risk of SSH lockout when activating `UFW` firewall<br>**AR:** خطر انقطاع اتصال `SSH` عند تفعيل جدار الحماية | **EN:** Configured `sudo ufw allow 22/tcp` explicitly prior to running `sudo ufw enable`.<br>**AR:** إضافة قاعدة السماح لمنفذ `22/tcp` أولاً قبل تفعيل جدار الحماية. |
+| **EN:** Syntax error in `/etc/ssh/sshd_config` breaking SSH daemon<br>**AR:** خطأ إملائي في ملف إعدادات `SSH` قد يوقف الخدمة | **EN:** Validated configuration using `sudo sshd -t` before restarting `sshd`.<br>**AR:** فحص سلامة ملف الإعدادات بالأمر `sudo sshd -t` قبل إعادة تشغيل الخدمة. |
+| **EN:** Filtering thousands of lines in `auth.log` for attacks<br>**AR:** صعوبة فرز آلاف الأسطر في سجل المصادقة لرصد الهجمات | **EN:** Automated extraction of failed IPs using `grep "Failed password"` and `awk`.<br>**AR:** أتمتة استخراج العناوين المشبوهة باستخدام `grep` و `awk`. |
+
+---
+
+## ☁️ Why It Matters for Cloud Engineers / لماذا يهم هذا مهندسي السحابة؟
+- **EN:** Every public-facing `AWS EC2` instance is scanned by bots within minutes of launch; OS hardening, `Security Groups`, and log auditing are mandatory production skills.
+- **AR:** يتعرض أي خادم `AWS EC2` متصل بالإنترنت لمحاولات فحص آلي خلال دقائق من إطلاقه؛ لذا فإن تأمين نظام التشغيل وتدقيق السجلات مهارات إلزامية لمهندس السحابة.
+
+---
+
+## 🔗 Project & Resource Links / روابط المشروع والمرجع
+- **GitHub Repository:** [Hisoka Cloud & DevOps Portfolio](https://github.com/ibrahim-a-elsayed-eng)
+
+---
+*Documented and verified with precision by Ibrahim Ahmed Elsayed.*

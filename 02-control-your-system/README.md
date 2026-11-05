@@ -1,55 +1,68 @@
-# ⚙️ Control Your System | التحكم في النظام
+# 🛡️ Project 2: Control Your System & Privilege Governance (dmin-toolkit) | التحكم في النظام وإدارة الصلاحيات
 
-[![Linux](https://img.shields.io/badge/OS-Linux%20Ubuntu%20WSL-orange?style=for-the-badge&logo=linux)](https://ubuntu.com/wsl)
-[![Bash](https://img.shields.io/badge/Shell-Bash-green?style=for-the-badge&logo=gnu-bash)](https://www.gnu.org/software/bash/)
-[![DevOps](https://img.shields.io/badge/Cloud-DevOps%20Journey-blue?style=for-the-badge&logo=amazonaws)](https://aws.amazon.com/)
-
-Welcome to the **Control Your System** repository! This project focuses on understanding the Linux system, file ownership, permissions, system information, and shell commands for managing the operating system as part of my journey to become a professional Cloud & DevOps Engineer.
+> Prepared & Documented by: **إبراهيم أحمد السيد (Ibrahim Ahmed Elsayed)** — Cloud & DevOps Engineering Journey.
 
 ---
 
-## 🚀 Overview & Objectives
-As a Cloud Engineer, managing system resources and security permissions is critical. This project focuses on:
-- **System Inspection:** Learning how to check system status and hardware information.
-- **Permission Management:** Understanding how to secure files and directories using ownership and access rights.
-- **Process Management:** Monitoring running processes and system performance.
-- **Shell Automation:** Using scripts to automate system information gathering.
+## 🌟 Overview / نظرة عامة
+- **EN:** This project focuses on Linux system administration, user and group identity management, multi-tenant file permissions (chmod, chown, chgrp, sudo), and automated telemetry scripts (sysinfo.sh & census.sh).
+- **AR:** يركز هذا المشروع على إدارة نظام لينكس، والتحكم في هويات المستخدمين والمجموعات، وإدارة الصلاحيات الأمنية للملفات (chmod, chown, chgrp, sudo)، وبناء سكربتات الفحص المؤتمتة (sysinfo.sh و census.sh).
 
 ---
 
-## 🛠️ Key Linux Commands Practiced
-| Category | Commands | Description |
-| :--- | :--- | :--- |
-| **Identity** | `whoami`, `id` | Checking current user and group memberships. |
-| **System Info** | `uname`, `df`, `du`, `free` | Monitoring system resources and disk usage. |
-| **Process Mgmt** | `top`, `ps` | Viewing and managing running processes. |
-| **Permissions** | `chmod`, `chown`, `sudo` | Managing file access and ownership. |
+## 🎯 Objectives / الأهداف
+- **EN:**
+  - Inspect user identities, groups, and system hardware resources.
+  - Enforce the Principle of Least Privilege using chmod 750/700, chown, and chgrp.
+  - Build automated bash scripts (sysinfo.sh & census.sh) using command substitution $().
+  - Troubleshoot cross-user path resolution and WSL storage locks.
+- **AR:**
+  - فحص هويات المستخدمين والمجموعات وموارد النظام الأساسية.
+  - تطبيق مبدأ الحد الأدنى من الصلاحيات (Least Privilege) باستخدام chmod 750/700, chown, و chgrp.
+  - بناء سكربتات أتمتة بلغة Bash (sysinfo.sh و census.sh) باستخدام استبدال الأوامر $().
+  - تشخيص وحل مشكلات المسارات بين المستخدمين المختلفين وأقفال نظام الملفات.
 
 ---
 
-## 💡 Key Learnings & Takeaways
-1. **Security First:** Understanding the importance of `sudo` and proper permission management (`chmod`/`chown`) to prevent unauthorized access.
-2. **Resource Monitoring:** Learning how to identify bottlenecks using `top` and `free` to ensure system stability.
-3. **System Visibility:** Gaining the ability to extract system information programmatically for reporting and troubleshooting.
+## 🛠️ Technologies Used / التقنيات المستخدمة
+- **EN:** OS: Ubuntu Linux (WSL) | Scripting: Bash | Security: Linux DAC (chmod / chown / chgrp / sudo)
+- **AR:** نظام التشغيل: Ubuntu Linux (WSL) | لغة السكربتات: Bash | الأمان: صلاحيات لينكس (chmod / chown / chgrp / sudo)
 
 ---
 
-## 📁 Repository Structure
-`02-control-your-system/`
-├── README.md             # Project documentation (this file)
-├── admin-toolkit/        # Scripts and reports for system administration
-├── app.log               # Log files for testing
-├── hello.sh              # Basic shell script
-└── secret.sh             # Script for permission testing
+## ⚙️ Commands Used / الأوامر المستخدمة
+whoami, id, uname -a, df -h, du -sh, ree -h, 	op, ps aux, chmod 700, chmod 750, chown, chgrp, sudo, su - teammate, ind, wc -l
 
 ---
 
-## 🔗 Project Link
-[NextWork: Control Your System](https://nextwork.ai/refreshed_olive_vibrant_plum/docs/d005387c-1f07-4574-af7a-975b712870d0)
+## 💡 Key Learnings / الدروس المستفادة الرئيسية
+1. **EN:** Enforcing 700 and 750 permission masks protects sensitive scripts from unauthorized users. / **AR:** تطبيق صلاحيات 700 و 750 يحمي السكربتات الحساسة من الوصول غير المصرح به.
+2. **EN:** Using chgrp enables secure collaboration across shared engineering groups (	oolkit-team). / **AR:** استخدام chgrp يتيح التعاون الآمن بين أعضاء الفريق الهندسي الواحد (	oolkit-team).
+3. **EN:** Command substitution $(...) embeds live telemetry directly inside automated reports. / **AR:** استبدال الأوامر $(...) يدمج بيانات النظام الحية مباشرة داخل التقارير المؤتمتة.
+4. **EN:** Always use absolute paths (/home/hisoka/...) instead of ~ when sharing files across different user accounts. / **AR:** استخدام المسارات المطلقة (/home/hisoka/...) بدلاً من الرمز ~ عند مشاركة الملفات بين حسابات مستخدمين مختلفة.
 
 ---
 
-## 👨‍💻 Author
-**Ibrahim Ahmed Elsayed (Hisoka)**  
-- Cloud & DevOps Engineer  
-- GitHub: [ibrahim-a-elsayed-eng](https://github.com/ibrahim-a-elsayed-eng)
+## ⚠️ Challenges & Solutions / التحديات والحلول
+
+| Challenge (المشكلة) | Solution (الحل المقترح) |
+|---|---|
+| **EN:** Relative path ~/report.txt failed after su - teammate<br>**AR:** فشل المسار النسبي ~/report.txt عند التبديل لحساب زميل العمل | **EN:** Use explicit absolute path (/home/hisoka/devops-journey/...) and grant parent traversal (o+x).<br>**AR:** استخدام المسار المطلق الكامل مع منح صلاحية العبور (o+x) للمجلدات الأبوية. |
+| **EN:** WSL Input/Output error dropping filesystem to Read-Only<br>**AR:** خطأ إدخال/إخراج في WSL أدى لتحول النظام للقراءة فقط | **EN:** Restart WSL hypervisor service via elevated PowerShell (
+et stop LxssManager ; net start LxssManager).<br>**AR:** إعادة تشغيل خدمة LxssManager من نافذة PowerShell كمسؤول لفك قفل الملفات. |
+| **EN:** Unauthorized access to administrative scripts<br>**AR:** وصول غير مصرح به لسكربتات الإدارة | **EN:** Restrict script permissions to owner-only (chmod 700 sysinfo.sh census.sh).<br>**AR:** تقييد صلاحيات السكربتات للمالك فقط عبر الأمر chmod 700. |
+
+---
+
+## ☁️ Why It Matters for Cloud Engineers / لماذا يهم هذا مهندسي السحابة؟
+- **EN:** Multi-tenant security and the Principle of Least Privilege on Linux servers mirror AWS IAM security governance in production cloud environments.
+- **AR:** عزل الصلاحيات وتطبيق مبدأ الحد الأدنى من الصلاحيات على خوادم لينكس يمثل الأساس العملي لحوكمة الأمان في AWS IAM داخل بيئات العمل السحابية.
+
+---
+
+## 🔗 Project & Resource Links / روابط المشروع والمرجع
+- **NextWork Reference:** [NextWork Level 2: Control Your System](https://nextwork.ai/refreshed_olive_vibrant_plum/docs/d005387c-1f07-4574-af7a-975b712870d0)
+- **GitHub Repository:** [Hisoka Cloud & DevOps Portfolio](https://github.com/ibrahim-a-elsayed-eng)
+
+---
+*Documented and verified with precision by Ibrahim Ahmed Elsayed.*

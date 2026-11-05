@@ -1,39 +1,66 @@
-# Project 6: Automate Linux Logs with Cron
+# ⏱️ Project 6: Automate Logs & Cron Scheduling | أتمتة السجلات وجدولة المهام عبر Cron
 
-Linux Level 6 project (NextWork). I turned a simulated website log into traffic and error reports with `awk`, `sed` and `sort`, backed it up with `tar` and `gzip`, and built a Log Watchdog script that runs by name from any directory and on a schedule with cron.
+> Prepared & Documented by: **إبراهيم أحمد السيد (Ibrahim Ahmed Elsayed)** — Cloud & DevOps Engineering Journey.
 
-## What is inside
-- `scripts/make-log.sh`: generates `access.log` with 50 fake web requests
-- `scripts/logwatch.sh`: the Log Watchdog; appends a timestamped summary (total requests, 404 and 500 counts, top 3 IPs) to `watchdog-report.txt`
-- `practice/`: the logs and the report: `access.log`, `access-edit.log` (copy for the `sed -i` test), `access-clean.log` (IPs anonymized) and `watchdog-report.txt`
-- `challenges.md`: 4 real problems with diagnosis, solution and lesson
-- `../05-bash-scripting/scripts/sysreport.sh`: its disk check now uses a shorter `awk` command
+---
 
-## Run it
-    mkdir -p ~/linux-level-6
-    cd scripts
-    ./make-log.sh
-    ./logwatch.sh
+## 🌟 Overview / نظرة عامة
+- **EN:** This project implements automated background job scheduling using `cron` (`crontab`) and enterprise log lifecycle management using `logrotate` to prevent disk exhaustion on Linux servers.
+- **AR:** يطبّق هذا المشروع جدولة المهام الخلفية تلقائياً باستخدام خدمة `cron` (`crontab`) وإدارة دورة حياة السجلات عبر أداة `logrotate` لحماية الخوادم من امتلاء القرص الصلب.
 
-Both scripts use `$HOME/linux-level-6` as their workspace, so that folder must exist. The report is appended to `~/linux-level-6/watchdog-report.txt` on every run.
+---
 
-## Tools used
-awk, sed, sort, uniq, grep, wc, head, tar, gzip, diff, cp, mkdir, chmod, date, realpath, crontab, cron, PATH, export
+## 🎯 Objectives / الأهداف
+- **EN:**
+  - Configure scheduled background maintenance jobs using 5-field `crontab` expressions.
+  - Design custom `logrotate` policies to compress, rotate, and purge aging application logs.
+  - Ensure cron scripts use absolute paths and redirect stdout/stderr cleanly.
+  - Verify scheduled job execution via system logs (`/var/log/syslog` & `journalctl`).
+- **AR:**
+  - إعداد مهام الصيانة المجدولة في الخلفية باستخدام تعبيرات `crontab` القياسية.
+  - تصميم سياسات `logrotate` مخصصة لضغط وتدوير وحذف السجلات القديمة تلقائياً.
+  - ضمان عمل سكربتات `cron` بالمسارات المطلقة وتوجيه المخرجات والأخطاء بشكل سليم.
+  - التحقق من تنفيذ المهام المجدولة عبر سجلات النظام (`/var/log/syslog`).
 
-## Mini challenges
-- The guide's disk line used `disk_usage` and kept the `%`, which would break my `-gt 80` check; I kept `DISK_USAGE` and removed the `%` with `sed`.
-- The guide's cron line used another user's home path; I used `realpath` to get mine.
-- My report already had 2 manual runs, so a count of 2 proved nothing; 3 headings proved at least one cron run.
-- `diff` was silent but I had compared the wrong restore folder; `ls -d` showed the missing `2`.
+---
 
-More details are in `challenges.md`.
+## 🛠️ Technologies Used / التقنيات المستخدمة
+- **EN:** OS: `Ubuntu Linux (WSL)` | Scheduler: `cron` (`crontab`) | Log Lifecycle: `logrotate` | Compression: `gzip`
+- **AR:** نظام التشغيل: `Ubuntu Linux (WSL)` | الجدولة: `cron` (`crontab`) | تدوير السجلات: `logrotate` | الضغط: `gzip`
 
-## What I learned
-- `awk` picks fields by position (`$1` is the IP, `$4` the status), and `sort | uniq -c | sort -nr` ranks them. `sort` must come first because `uniq` only counts lines that are next to each other.
-- `sed` replaces text. The `g` flag replaces every match in a line, and `-i` edits the file itself, so I test it on a copy first.
-- A backup is only trusted after a restore: `tar -czf`, `tar -tzf`, `tar -xzf -C`, then `diff -qr`.
-- `PATH` is the list of folders Bash searches, so a script in `~/bin` runs by name from anywhere. Cron has a smaller environment, so it needs the full path.
+---
 
-## Project Link
+## ⚙️ Commands Used / الأوامر المستخدمة
+`crontab -e`, `crontab -l`, `sudo service cron status`, `sudo systemctl status cron`, `logrotate -d`, `sudo logrotate -f`, `tail -f /var/log/syslog`
 
-NextWork: https://nextwork.ai/hemaa/docs/cd38fea0-56b0-4b7f-8d30-428b5fcd8d72
+---
+
+## 💡 Key Learnings / الدروس المستفادة الرئيسية
+1. **EN:** Cron runs with a minimal `PATH` environment, so scripts must always use absolute paths. / **AR:** تعمل خدمة `cron` ببيئة متغيرات محدودة، لذا يجب دائماً كتابة المسارات المطلقة الكاملة داخل السكربتات.
+2. **EN:** Testing `logrotate` with `-d` (dry-run debug mode) prevents accidental log deletion. / **AR:** اختبار إعدادات `logrotate` بالخيار `-d` (وضع المحاكاة) يمنع الحذف الخاطئ للسجلات.
+3. **EN:** Unmanaged log growth is one of the top causes of production server outages. / **AR:** تُعد زيادة حجم ملفات السجلات دون تدوير من أكثر أسباب توقف خوادم الإنتاج شيوعاً.
+4. **EN:** Redirecting cron output (`>> /path/cron.log 2>&1`) captures silent background failures. / **AR:** توجيه مخرجات وأخطاء المهام المجدولة (`2>&1`) يتيح اكتشاف الأعطال الخفية في الخلفية.
+
+---
+
+## ⚠️ Challenges & Solutions / التحديات والحلول
+
+| Challenge (المشكلة) | Solution (الحل المقترح) |
+|---|---|
+| **EN:** Script works manually in terminal but fails inside `cron`<br>**AR:** السكربت يعمل يدوياً ولكنه يفشل عند تشغيله عبر `cron` | **EN:** Replaced relative paths with absolute paths (`/home/hisoka/...`) and defined `PATH`.<br>**AR:** استبدال المسارات النسبية بمسارات مطلقة كاملة وتحديد متغير `PATH` صراحةً. |
+| **EN:** `cron` daemon not running automatically in WSL session<br>**AR:** خدمة `cron` لا تعمل تلقائياً عند بدء جلسة WSL | **EN:** Started and verified service via `sudo service cron start` and checked `syslog`.<br>**AR:** تشغيل الخدمة عبر `sudo service cron start` والتحقق من السجلات. |
+| **EN:** Verifying `logrotate` config without waiting 24 hours<br>**AR:** التحقق من صحة إعدادات تدوير السجلات فوراً دون انتظار يوم كامل | **EN:** Used `logrotate -d` for dry-run validation and `logrotate -f` to force rotation.<br>**AR:** استخدام `logrotate -d` للفحص التجريبي ثم `logrotate -f` للتنفيذ الفوري. |
+
+---
+
+## ☁️ Why It Matters for Cloud Engineers / لماذا يهم هذا مهندسي السحابة؟
+- **EN:** Automated log rotation and scheduled maintenance on `AWS EC2` prevent disk-full crashes and reduce `Amazon CloudWatch` / `EBS` storage costs.
+- **AR:** تمنع أتمتة تدوير السجلات والمهام المجدولة توقف خوادم `AWS EC2` بسبب امتلاء القرص، كما تقلل تكاليف التخزين السحابي.
+
+---
+
+## 🔗 Project & Resource Links / روابط المشروع والمرجع
+- **GitHub Repository:** [Hisoka Cloud & DevOps Portfolio](https://github.com/ibrahim-a-elsayed-eng)
+
+---
+*Documented and verified with precision by Ibrahim Ahmed Elsayed.*

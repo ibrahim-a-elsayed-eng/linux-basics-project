@@ -1,62 +1,68 @@
-# Linux System Administration & Privilege Governance Toolkit
-* **NextWork Project Lab Link:** [Verify Project 2 on NextWork](https://nextwork.ai/refreshed_olive_vibrant_plum/docs/d005387c-1f07-4574-af7a-975b712870d0)
-* **Parent Repository Pipline:** [project 2 Docs](projects)
-## 📌 Architectural Overview
-This repository contains production-grade infrastructure automation scripts developed during **Day 12** of the Cloud Engineering Roadmap. The core focus is establishing secure multi-tenancy, granular access control tracking, and programmatic text telemetry extraction utilizing the native Linux kernel subsystems.
+# 🛡️ Project 2: Control Your System & Privilege Governance (dmin-toolkit) | التحكم في النظام وإدارة الصلاحيات
 
-Instead of deploying generic templates, all scripts and configuration metrics are wrapped within a global unified mono-repo architecture (`~/devops-journey/projects`), validating enterprise-level workflow tracking and version control compliance.
+> Prepared & Documented by: **إبراهيم أحمد السيد (Ibrahim Ahmed Elsayed)** — Cloud & DevOps Engineering Journey.
 
 ---
 
-## 🛠️ Infrastructure Core Utilities
-
-### 1. Administrative System Monitoring (`sysinfo.sh`)
-An automated operations tool designed to consolidate runtime host telemetry into non-volatile reporting assets.
-* **Privilege Profile:** `700` (Strictly bounded to Owner context).
-* **Target Handshake:** Programmatically captures current UID, system localized timestamp, and isolates the top 5 compute-intensive system processes directly from the process table.
-* **Data Flow Architecture:** Captures standard output streams and routes the dynamic payload using arrow operators into static persistence blocks (`report.txt`).
-
-### 2. File Type Census Script (`census.sh`)
-An advanced data aggregation pipeline crafted to scan and recursively audit system resource footprints across targeted workspaces.
-* **Privilege Profile:** `700` (Owner-exclusive access verified).
-* **Engineering Paradigm:** Employs nested command substitution via `$()` to encapsulate runtime evaluation blocks. It pipes recursive `find` query outputs straight into specialized line-counting memory buffers (`wc -l`), aggregating file counts into declarative structural logs (`census-report.txt`) without staining the shell terminal window.
+## 🌟 Overview / نظرة عامة
+- **EN:** This project focuses on Linux system administration, user and group identity management, multi-tenant file permissions (chmod, chown, chgrp, sudo), and automated telemetry scripts (sysinfo.sh & census.sh).
+- **AR:** يركز هذا المشروع على إدارة نظام لينكس، والتحكم في هويات المستخدمين والمجموعات، وإدارة الصلاحيات الأمنية للملفات (chmod, chown, chgrp, sudo)، وبناء سكربتات الفحص المؤتمتة (sysinfo.sh و census.sh).
 
 ---
 
-## ⚙️ Access Control Matrix & Permission Logic
-The deployment enforces the **Principle of Least Privilege (PoLP)** through a multi-tiered Discretionary Access Control (DAC) framework:
-
-* **Role Isolation:** Local system contexts were partitioned between the primary engineering account (`hisoka`) and temporary teammate profiles (`teammate`).
-* **Shared Environment Governance:** Shared project directories were tightly mapped using the `chgrp` engine to align with the specific security group (`toolkit-team`).
-* **The `750` Mask Implementation:** Standard permissions were hardened to `drwxr-x---`, guaranteeing absolute system configuration lockouts for global unverified users (`others`), while maintaining seamless traversal capabilities for certified group members.
-
----
-
-## 🛡️ Production Engineering Troubleshooting Log
-
-### 1. Subsystem Hypervisor Deadlock Recovery
-* **Anomalous Footprint:** Execution of file utilities failed with a critical `-bash: /usr/bin/nano: Input/output error` and catastrophic `E_UNEXPECTED` exception window codes, dropping the kernel runtime storage layer into absolute safe *Read-Only* status.
-* **Remediation Strategy:** Discovered a hard synchronized deadlock inside the background Windows Subsystem for Linux (WSL) orchestrator. Elevated administrative host parameters were forced from the Windows container terminal to cycle the core daemon:
-  ```powershell
-  # Executed via elevated Administrator context to recycle hypervisor runtime
-  net stop LxssManager ; net start LxssManager
-  ```
-  This cold-cycle operation successfully unmounted frozen file-locks and restored clean read-write mounting capabilities to the active Linux storage targets.
-
-### 2. Absolute Path Traversal & Login Shell Boundaries
-* **Anomalous Footprint:** Switching execution contexts via `su - teammate` returned persistent `cat: ~/report.txt: No such file or directory` permission denials during shared resource evaluation.
-* **Remediation Strategy:** Analyzed the login shell flags and verified that the tilde (`~`) character was resolving relatively against the destination account's pristine home directory instead of the hosting project path. Restructured the pipeline scripts to enforce **Absolute Path Resolution**:
-  ```bash
-  # Bypassed relative environment drift using explicit mapping
-  cat /home/hisoka/devops-journey/02-control-your-system/admin-toolkit/report.txt
-  ```
-  This explicit declaration systematically satisfied the kernel path lookup routines, ensuring stable validation across the cross-account infrastructure.
+## 🎯 Objectives / الأهداف
+- **EN:**
+  - Inspect user identities, groups, and system hardware resources.
+  - Enforce the Principle of Least Privilege using chmod 750/700, chown, and chgrp.
+  - Build automated bash scripts (sysinfo.sh & census.sh) using command substitution $().
+  - Troubleshoot cross-user path resolution and WSL storage locks.
+- **AR:**
+  - فحص هويات المستخدمين والمجموعات وموارد النظام الأساسية.
+  - تطبيق مبدأ الحد الأدنى من الصلاحيات (Least Privilege) باستخدام chmod 750/700, chown, و chgrp.
+  - بناء سكربتات أتمتة بلغة Bash (sysinfo.sh و census.sh) باستخدام استبدال الأوامر $().
+  - تشخيص وحل مشكلات المسارات بين المستخدمين المختلفين وأقفال نظام الملفات.
 
 ---
 
-## 📊 Deployment Execution Checklist
-- [x] Provision isolated Mono-Repo structural directory layout.
-- [x] Configure explicit path traversal bit allocation (`o+x`) across parent directory chains.
-- [x] Validate zero-disk-footprint piping and pattern matching operations via `grep`.
-- [x] Hardcode recursive directory purges post-test execution to eliminate resource drift.
+## 🛠️ Technologies Used / التقنيات المستخدمة
+- **EN:** OS: Ubuntu Linux (WSL) | Scripting: Bash | Security: Linux DAC (chmod / chown / chgrp / sudo)
+- **AR:** نظام التشغيل: Ubuntu Linux (WSL) | لغة السكربتات: Bash | الأمان: صلاحيات لينكس (chmod / chown / chgrp / sudo)
 
+---
+
+## ⚙️ Commands Used / الأوامر المستخدمة
+whoami, id, uname -a, df -h, du -sh, ree -h, 	op, ps aux, chmod 700, chmod 750, chown, chgrp, sudo, su - teammate, ind, wc -l
+
+---
+
+## 💡 Key Learnings / الدروس المستفادة الرئيسية
+1. **EN:** Enforcing 700 and 750 permission masks protects sensitive scripts from unauthorized users. / **AR:** تطبيق صلاحيات 700 و 750 يحمي السكربتات الحساسة من الوصول غير المصرح به.
+2. **EN:** Using chgrp enables secure collaboration across shared engineering groups (	oolkit-team). / **AR:** استخدام chgrp يتيح التعاون الآمن بين أعضاء الفريق الهندسي الواحد (	oolkit-team).
+3. **EN:** Command substitution $(...) embeds live telemetry directly inside automated reports. / **AR:** استبدال الأوامر $(...) يدمج بيانات النظام الحية مباشرة داخل التقارير المؤتمتة.
+4. **EN:** Always use absolute paths (/home/hisoka/...) instead of ~ when sharing files across different user accounts. / **AR:** استخدام المسارات المطلقة (/home/hisoka/...) بدلاً من الرمز ~ عند مشاركة الملفات بين حسابات مستخدمين مختلفة.
+
+---
+
+## ⚠️ Challenges & Solutions / التحديات والحلول
+
+| Challenge (المشكلة) | Solution (الحل المقترح) |
+|---|---|
+| **EN:** Relative path ~/report.txt failed after su - teammate<br>**AR:** فشل المسار النسبي ~/report.txt عند التبديل لحساب زميل العمل | **EN:** Use explicit absolute path (/home/hisoka/devops-journey/...) and grant parent traversal (o+x).<br>**AR:** استخدام المسار المطلق الكامل مع منح صلاحية العبور (o+x) للمجلدات الأبوية. |
+| **EN:** WSL Input/Output error dropping filesystem to Read-Only<br>**AR:** خطأ إدخال/إخراج في WSL أدى لتحول النظام للقراءة فقط | **EN:** Restart WSL hypervisor service via elevated PowerShell (
+et stop LxssManager ; net start LxssManager).<br>**AR:** إعادة تشغيل خدمة LxssManager من نافذة PowerShell كمسؤول لفك قفل الملفات. |
+| **EN:** Unauthorized access to administrative scripts<br>**AR:** وصول غير مصرح به لسكربتات الإدارة | **EN:** Restrict script permissions to owner-only (chmod 700 sysinfo.sh census.sh).<br>**AR:** تقييد صلاحيات السكربتات للمالك فقط عبر الأمر chmod 700. |
+
+---
+
+## ☁️ Why It Matters for Cloud Engineers / لماذا يهم هذا مهندسي السحابة؟
+- **EN:** Multi-tenant security and the Principle of Least Privilege on Linux servers mirror AWS IAM security governance in production cloud environments.
+- **AR:** عزل الصلاحيات وتطبيق مبدأ الحد الأدنى من الصلاحيات على خوادم لينكس يمثل الأساس العملي لحوكمة الأمان في AWS IAM داخل بيئات العمل السحابية.
+
+---
+
+## 🔗 Project & Resource Links / روابط المشروع والمرجع
+- **NextWork Reference:** [NextWork Level 2: Control Your System](https://nextwork.ai/refreshed_olive_vibrant_plum/docs/d005387c-1f07-4574-af7a-975b712870d0)
+- **GitHub Repository:** [Hisoka Cloud & DevOps Portfolio](https://github.com/ibrahim-a-elsayed-eng)
+
+---
+*Documented and verified with precision by Ibrahim Ahmed Elsayed.*
