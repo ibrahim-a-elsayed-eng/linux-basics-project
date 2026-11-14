@@ -1,66 +1,97 @@
-# 🔒 Project 7: Server Hardening, Log Auditing & Monitoring | تأمين الخوادم وتدقيق السجلات والمراقبة
+# 🔒 Project 7: Server Hardening & Log Monitor | تأمين الخادم ومراقب السجلات
 
 > Prepared & Documented by: **إبراهيم أحمد السيد (Ibrahim Ahmed Elsayed)** — Cloud & DevOps Engineering Journey.
 
 ---
 
 ## 🌟 Overview / نظرة عامة
-- **EN:** This capstone Linux security project implements enterprise server hardening (`SSH` lockdown, `UFW` firewall rules, `Fail2ban` intrusion prevention), centralized log auditing, and continuous resource monitoring.
-- **AR:** يطبّق مشروع التخرج الأمني هذا تأمين خوادم لينكس بمستوى المؤسسات (تأمين `SSH`، وضبط جدار الحماية `UFW`، ومنع الاختراق عبر `Fail2ban`)، مع التدقيق المتقدم للسجلات والمراقبة المستمرة.
+- **EN:** This is a training project on Ubuntu WSL. I practiced general SSH hardening and UFW firewall rules, and built a Bash script (`log-monitor.sh`) that monitors a demo application log (`/var/log/demo-app/application.log`) and runs as a hardened `systemd` oneshot service (`log-monitor.service`) under a dedicated user.
+- **AR:** هذا مشروع تدريبي على بيئة Ubuntu WSL. تدرّبت فيه على تأمين SSH وقواعد جدار الحماية UFW بشكل عام، وكتبت سكربت Bash (`log-monitor.sh`) لمراقبة سجل تطبيق تجريبي (`/var/log/demo-app/application.log`)، وتشغيله كخدمة `systemd` من نوع `oneshot` (`log-monitor.service`) تحت مستخدم مخصص مع خيارات عزل وحماية.
 
 ---
 
 ## 🎯 Objectives / الأهداف
 - **EN:**
-  - Harden `SSH` configuration (`/etc/ssh/sshd_config`) by disabling root login and enforcing key-based authentication.
-  - Configure `UFW` firewall rules following the Principle of Least Privilege (default deny incoming).
-  - Detect brute-force login attempts in `/var/log/auth.log` and automate IP banning with `Fail2ban`.
-  - Monitor live network sockets and resource anomalies using `ss -tulpn` and `htop`.
+  - Practice basic SSH hardening and UFW firewall rules on Ubuntu WSL.
+  - Write `log-monitor.sh` to read the last 200 lines of `/var/log/demo-app/application.log`, count lines with `level=WARN` and `level=ERROR`, write a summary line to `/var/log/log-monitor/report.log`, and print an `ALERT` message if there is at least one `ERROR`.
+  - Run the script as a `systemd` oneshot service (`log-monitor.service`) under a dedicated user `log-monitor` with strict sandboxing options.
 - **AR:**
-  - تأمين خدمة `SSH` عبر تعطيل دخول الجذر (`PermitRootLogin no`) وفرض المصادقة بالمفاتيح المشفرة.
-  - ضبط قواعد جدار الحماية `UFW` وفق مبدأ الحد الأدنى من الصلاحيات (منع جميع الاتصالات الواردة افتراضياً).
-  - رصد محاولات الاختراق في سجل `/var/log/auth.log` وحظرها تلقائياً باستخدام `Fail2ban`.
-  - مراقبة المنافذ المفتوحة وموارد النظام لحظياً باستخدام `ss -tulpn` و `htop`.
+  - التدرب على أساسيات تأمين SSH وقواعد جدار الحماية UFW على Ubuntu WSL.
+  - كتابة سكربت `log-monitor.sh` لقراءة آخر 200 سطر من `/var/log/demo-app/application.log`، وعدّ الأسطر التي تحتوي على `level=WARN` و`level=ERROR`، وكتابة سطر ملخص في `/var/log/log-monitor/report.log`، وطباعة رسالة `ALERT` عند وجود `ERROR` واحد على الأقل.
+  - تشغيل السكربت كخدمة `systemd` من نوع `oneshot` (`log-monitor.service`) تحت المستخدم المخصص `log-monitor` مع خيارات عزل وحماية.
 
 ---
 
 ## 🛠️ Technologies Used / التقنيات المستخدمة
-- **EN:** OS: `Ubuntu Linux (WSL)` | Firewall: `UFW` | Security: `OpenSSH`, `Fail2ban` | Auditing: `auth.log`, `ss`, `htop`
-- **AR:** نظام التشغيل: `Ubuntu Linux (WSL)` | جدار الحماية: `UFW` | الأمان: `OpenSSH`, `Fail2ban` | التدقيق: `auth.log`, `ss`, `htop`
+- **EN:** `Ubuntu WSL` | `SSH` | `UFW` | `Bash` | `systemd`
+- **AR:** `Ubuntu WSL` | `SSH` | `UFW` | `Bash` | `systemd`
 
 ---
 
-## ⚙️ Commands Used / الأوامر المستخدمة
-`sudo ufw default deny incoming`, `sudo ufw allow ssh`, `sudo ufw enable`, `sudo ufw status verbose`, `sudo systemctl status fail2ban`, `sudo ss -tulpn`, `grep "Failed password" /var/log/auth.log`
+## 📜 Script: `scripts/log-monitor.sh`
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+source_log="${SOURCE_LOG:-/var/log/demo-app/application.log}"
+report_log="${REPORT_LOG:-/var/log/log-monitor/report.log}"
+window_lines="${WINDOW_LINES:-200}"
+
+if [[ ! -r "$source_log" ]]; then
+  printf 'ERROR source log is not readable: %s\n' "$source_log" >&2
+  exit 1
+fi
+
+recent_log="$(tail -n "$window_lines" "$source_log")"
+warning_count="$(grep -c 'level=WARN' <<<"$recent_log" || true)"
+error_count="$(grep -c 'level=ERROR' <<<"$recent_log" || true)"
+timestamp="$(date --iso-8601=seconds)"
+summary="$timestamp source=$source_log window_lines=$window_lines warnings=$warning_count errors=$error_count"
+
+printf '%s\n' "$summary" | tee -a "$report_log"
+
+if (( error_count > 0 )); then
+  printf 'ALERT errors=%s source=%s\n' "$error_count" "$source_log" >&2
+fi
+```
 
 ---
 
-## 💡 Key Learnings / الدروس المستفادة الرئيسية
-1. **EN:** Disabling root SSH login (`PermitRootLogin no`) and password auth eliminates 99% of brute-force risks. / **AR:** تعطيل الدخول المباشر بحساب `root` عبر `SSH` واعتماد المفاتيح المشفرة يقضي على معظم هجمات التخمين.
-2. **EN:** Always allow `SSH` port before enabling `UFW` to avoid locking yourself out of a remote cloud server. / **AR:** يجب دائماً السماح بمنفذ `SSH` قبل تفعيل جدار الحماية `UFW` لتجنب حظر نفسك خارج الخادم السحابي.
-3. **EN:** Auditing `/var/log/auth.log` with `grep` reveals unauthorized access patterns immediately. / **AR:** فحص سجل `/var/log/auth.log` باستخدام `grep` يكشف محاولات الدخول غير المصرح بها فوراً.
-4. **EN:** Host-level firewalls (`UFW`) work alongside cloud firewalls (`AWS Security Groups`) for Defense-in-Depth. / **AR:** يعمل جدار الحماية الداخلي (`UFW`) بالتكامل مع `AWS Security Groups` لتطبيق استراتيجية الدفاع متعدد الطبقات.
+## ⚙️ Systemd Service: `config/log-monitor.service`
 
----
+Runs as `Type=oneshot` under user/group `log-monitor` with these hardening options:
+`NoNewPrivileges`, `PrivateTmp`, `PrivateDevices`, `ProtectSystem=strict`, `ProtectHome`, `ProtectKernelTunables`, `ProtectKernelModules`, `ProtectControlGroups`, `UMask=0027`.
 
-## ⚠️ Challenges & Solutions / التحديات والحلول
+```ini
+[Unit]
+Description=Scan the demo application log for warnings and errors
+Documentation=man:systemd.service(5)
+After=local-fs.target
+ConditionPathExists=/var/log/demo-app/application.log
 
-| Challenge (المشكلة) | Solution (الحل المقترح) |
-|---|---|
-| **EN:** Risk of SSH lockout when activating `UFW` firewall<br>**AR:** خطر انقطاع اتصال `SSH` عند تفعيل جدار الحماية | **EN:** Configured `sudo ufw allow 22/tcp` explicitly prior to running `sudo ufw enable`.<br>**AR:** إضافة قاعدة السماح لمنفذ `22/tcp` أولاً قبل تفعيل جدار الحماية. |
-| **EN:** Syntax error in `/etc/ssh/sshd_config` breaking SSH daemon<br>**AR:** خطأ إملائي في ملف إعدادات `SSH` قد يوقف الخدمة | **EN:** Validated configuration using `sudo sshd -t` before restarting `sshd`.<br>**AR:** فحص سلامة ملف الإعدادات بالأمر `sudo sshd -t` قبل إعادة تشغيل الخدمة. |
-| **EN:** Filtering thousands of lines in `auth.log` for attacks<br>**AR:** صعوبة فرز آلاف الأسطر في سجل المصادقة لرصد الهجمات | **EN:** Automated extraction of failed IPs using `grep "Failed password"` and `awk`.<br>**AR:** أتمتة استخراج العناوين المشبوهة باستخدام `grep` و `awk`. |
-
----
-
-## ☁️ Why It Matters for Cloud Engineers / لماذا يهم هذا مهندسي السحابة؟
-- **EN:** Every public-facing `AWS EC2` instance is scanned by bots within minutes of launch; OS hardening, `Security Groups`, and log auditing are mandatory production skills.
-- **AR:** يتعرض أي خادم `AWS EC2` متصل بالإنترنت لمحاولات فحص آلي خلال دقائق من إطلاقه؛ لذا فإن تأمين نظام التشغيل وتدقيق السجلات مهارات إلزامية لمهندس السحابة.
+[Service]
+Type=oneshot
+User=log-monitor
+Group=log-monitor
+ExecStart=/usr/local/lib/log-monitor/log-monitor.sh
+LogsDirectory=log-monitor
+LogsDirectoryMode=0750
+UMask=0027
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+```
 
 ---
 
 ## 🔗 Project & Resource Links / روابط المشروع والمرجع
-- **GitHub Repository:** [Hisoka Cloud & DevOps Portfolio](https://github.com/ibrahim-a-elsayed-eng)
+- **GitHub Profile:** [ibrahim-a-elsayed-eng](https://github.com/ibrahim-a-elsayed-eng)
 
 ---
-*Documented and verified with precision by Ibrahim Ahmed Elsayed.*
+*Documented by Ibrahim Ahmed Elsayed.*

@@ -30,7 +30,7 @@
 | **04** | **[Network, Services & Health](./04-network-services-health)** | systemd, ss -tuln, curl -I, du, df | Server health dashboard (sysdash) & listening socket triage. | [📘 Full README](./04-network-services-health/README.md) |
 | **05** | **[Bash Scripting & Automation](./05-bash-scripting)** | GNU Bash, set -euo pipefail, 	ar/gzip | Modular automation scripts with fail-fast error handling and logging. | [📘 Full README](./05-bash-scripting/README.md) |
 | **06** | **[Automate Logs & Cron](./06-automate-logs-cron)** | cron/crontab, logrotate, log analysis | Automated background maintenance & enterprise log lifecycle policies. | [📘 Full README](./06-automate-logs-cron/README.md) |
-| **07** | **[Server Hardening & Monitoring](./07-harden-log-monitor)** | UFW Firewall, SSH Lockdown, Fail2ban | Multi-layered defense (Defense-in-Depth) & automated intrusion prevention. | [📘 Full README](./07-harden-log-monitor/README.md) |
+| **07** | **[Server Hardening & Log Monitor](./07-harden-log-monitor)** | Ubuntu WSL, SSH, UFW, Bash, systemd | Training project: general SSH & UFW hardening practice, plus `log-monitor.sh` & hardened `systemd` oneshot service on a demo app log. | [📘 Full README](./07-harden-log-monitor/README.md) |
 
 ---
 
