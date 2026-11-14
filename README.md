@@ -1,3 +1,5 @@
+<img width="2814" height="1536" alt="Gemini_Generated_Image_935sav935sav935s" src="https://github.com/user-attachments/assets/77474a49-580b-4376-9e5a-206693c5b0aa" />
+
 # 🚀 Cloud & DevOps Engineering Journey | رحلة هندسة السحابة وعمليات التطوير
 
 [![Linux](https://img.shields.io/badge/OS-Ubuntu%20Linux%20WSL2-orange?style=for-the-badge&logo=ubuntu)](https://ubuntu.com/wsl)
