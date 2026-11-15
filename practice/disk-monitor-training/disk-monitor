@@ -1,0 +1,6 @@
+/var/log/disk-monitor/disk-monitor.log {
+weekly
+rotate 4
+compress
+missingok
+}

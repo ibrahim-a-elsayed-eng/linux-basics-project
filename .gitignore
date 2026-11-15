@@ -3,3 +3,5 @@
 *.tfstate.*
 *.tfvars
 .env
+*.log
+*.tar.gz

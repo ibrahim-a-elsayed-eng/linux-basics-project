@@ -1,0 +1,6 @@
+[Unit]
+Description=auto check script
+[Service]
+Type=oneshot
+User=diskmon
+ExecStart=/home/hisoka/devops-journey/practice/disk-monitor-training/disk-monitor.sh
