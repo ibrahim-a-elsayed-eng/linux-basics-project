@@ -1,69 +1,74 @@
-# ⚙️ Project 3: Software & Processes Governance (dmin-toolkit) | إدارة الحزم البرمجية والتحكم في العمليات
+<div align="center">
 
-> Prepared & Documented by: **إبراهيم أحمد السيد (Ibrahim Ahmed Elsayed)** — Cloud & DevOps Engineering Journey.
+# Project 3: Software & Processes Governance (`admin-toolkit`)
 
----
+![Linux](https://img.shields.io/badge/OS-Ubuntu%20WSL-FF9900?style=for-the-badge&logo=ubuntu&logoColor=white)
+![Packages](https://img.shields.io/badge/Package%20Manager-APT-0EA5E9?style=for-the-badge)
+![Processes](https://img.shields.io/badge/Signals-SIGTERM%20%7C%20SIGKILL-10B981?style=for-the-badge)
+![Cost](https://img.shields.io/badge/Lab%20Cost-%240%20Local%20WSL-0F172A?style=for-the-badge)
 
-## 🌟 Overview / نظرة عامة
-- **EN:** This project implements an automated Linux system administration toolkit (sysinfo.sh) focusing on package lifecycle management (pt) and real-time process governance (ps, htop, background jobs, and Unix signals).
-- **AR:** يطبّق هذا المشروع حزمة أدوات مؤتمتة لإدارة أنظمة لينكس (sysinfo.sh) تركز على إدارة دورة حياة الحزم البرمجية (pt) والحوكمة الفورية للعمليات الجارية (ps, htop, العمليات الخلفية، وإشارات النظام).
+**Automated `sysinfo.sh` telemetry, `apt` package lifecycle management, background jobs, and Unix signal handling (`SIGTERM` vs. `SIGKILL`).**
 
----
-
-## 🎯 Objectives / الأهداف
-- **EN:**
-  - Master software package installation, auditing, and purging using pt.
-  - Monitor CPU-intensive processes and manage background/foreground jobs (&, jobs, g).
-  - Handle unresponsive processes safely using Unix signals (SIGTERM vs SIGKILL).
-  - Automate system health telemetry into persistent reports (sysinfo.sh -> 
-eport.txt).
-- **AR:**
-  - إتقان تثبيت الحزم البرمجية وفحصها وإزالتها بالكامل باستخدام أداة pt.
-  - مراقبة العمليات الأكثر استهلاكاً للمعالج وإدارة المهام في الخلفية والواجهة (&, jobs, g).
-  - التعامل الآمن مع العمليات المتوقفة عبر إشارات النظام (SIGTERM مقابل SIGKILL).
-  - أتمتة تقارير حالة النظام وحفظها في ملفات دائمة (sysinfo.sh -> 
-eport.txt).
+</div>
 
 ---
 
-## 🛠️ Technologies Used / التقنيات المستخدمة
-- **EN:** OS: Ubuntu Linux (WSL) | Scripting: Bash (sysinfo.sh) | Package Manager: APT | Process Tools: ps, htop, kill
-- **AR:** نظام التشغيل: Ubuntu Linux (WSL) | لغة السكربتات: Bash (sysinfo.sh) | مدير الحزم: APT | أدوات العمليات: ps, htop, kill
+## 1. Architecture Overview
+
+```mermaid
+flowchart LR
+    APT["Package Lifecycle\napt update / install / purge / autoremove"] --> Toolkit["admin-toolkit/sysinfo.sh\n2>/dev/null clean output"] --> Report["admin-toolkit/report.txt"]
+    Proc["Process Control\nps aux --sort=-%cpu | htop | jobs / fg"] --> Signals["kill -15 SIGTERM -> kill -9 SIGKILL"]
+```
+
+> [!IMPORTANT]
+> **Key Design Decision:** Always attempt graceful termination (`kill -15` / `SIGTERM`) before forcing kernel termination (`kill -9` / `SIGKILL`), and suppress noisy `apt list` stderr warnings (`2>/dev/null`) to keep automated reports clean.
 
 ---
 
-## ⚙️ Commands Used / الأوامر المستخدمة
-sudo apt update, pt search, pt show, sudo apt install, sudo apt remove, sudo apt purge, sudo apt autoremove, ps aux --sort=-%cpu, htop, jobs, g, kill -15 (SIGTERM), kill -9 (SIGKILL), chmod +x, ./sysinfo.sh > report.txt
+## 2. Problem & Solution
+
+| Aspect | Detail |
+| :--- | :--- |
+| **Problem** | Orphaned package configs, terminal-blocking background tasks, CPU spikes, and noisy stderr warnings break automated health reporting. |
+| **Solution** | Standardized `apt purge`/`autoremove`, background job control (`&`, `jobs`, `fg`), CPU sorting (`ps aux --sort=-%cpu`), and clean `sysinfo.sh > report.txt` pipelines. |
+| **Operational Boundary** | Graceful `SIGTERM` (`-15`) first; `SIGKILL` (`-9`) reserved only for unresponsive processes. |
 
 ---
 
-## 💡 Key Learnings / الدروس المستفادة الرئيسية
-1. **EN:** Clean package removal using pt purge and utoremove prevents configuration bloat. / **AR:** الإزالة النظيفة للحزم باستخدام pt purge و utoremove تمنع تراكم ملفات الإعدادات اليتيمة.
-2. **EN:** Suppressing noisy stderr warnings via 2>/dev/null keeps automated telemetry pipelines clean. / **AR:** كتم رسائل التحذير الجانبية عبر 2>/dev/null يحافظ على نظافة مخرجات السكربتات المؤتمتة.
-3. **EN:** Always attempt graceful termination (SIGTERM - 15) before forcing kernel kill (SIGKILL - 9). / **AR:** البدء دائماً بالإغلاق الآمن (SIGTERM - 15) لحفظ البيانات قبل اللجوء للإغلاق الإجباري (SIGKILL - 9).
-4. **EN:** Sorting process tables (ps aux --sort=-%cpu | head -11) isolates performance bottlenecks instantly. / **AR:** ترتيب جدول العمليات حسب استهلاك المعالج يعزل الاختناقات البرمجية فوراً.
+## 3. Tech Stack
+- **Operating System:** Ubuntu Linux (WSL)
+- **Package Management:** `apt` (`update`, `search`, `show`, `install`, `remove`, `purge`, `autoremove`)
+- **Process & Signal Tools:** `ps aux --sort=-%cpu`, `htop`, `&`, `jobs`, `fg`, `kill -15` (`SIGTERM`), `kill -9` (`SIGKILL`)
+- **Scripting:** GNU Bash (`admin-toolkit/sysinfo.sh`)
 
 ---
 
-## ⚠️ Challenges & Solutions / التحديات والحلول
+## 4. Implementation Steps (Summary)
+1. Managed the full `apt` lifecycle including clean removal (`sudo apt purge` + `sudo apt autoremove`).
+2. Audited top CPU consumers (`ps aux --sort=-%cpu | head -11`), monitored via `htop`, and managed background jobs (`&`, `jobs`, `fg`).
+3. Practiced safe process termination escalating from `kill -15 <PID>` to `kill -9 <PID>` only when necessary.
+4. Automated system telemetry output via `./sysinfo.sh > report.txt` with `2>/dev/null` stderr filtering.
 
-| Challenge (المشكلة) | Solution (الحل المقترح) |
-|---|---|
-| **EN:** pt list warning polluting script output<br>**AR:** رسائل تحذير pt list تشوّه مخرجات التقرير | **EN:** Redirect stderr to null (pt list --installed 2>/dev/null \| wc -l).<br>**AR:** توجيه مخرجات الأخطاء إلى 2>/dev/null للحصول على العدد الصافي فقط. |
-| **EN:** Terminal blocked by long-running process<br>**AR:** توقف الطرفية بسبب عملية طويلة المدى | **EN:** Run asynchronously in background using & and manage with jobs / g.<br>**AR:** تشغيل العملية في الخلفية بإضافة & وإدارتها عبر أوامر jobs و g. |
-| **EN:** Unresponsive process ignoring normal close<br>**AR:** عملية متجمدة لا تستجيب للإغلاق العادي | **EN:** Escalate from kill -15 <PID> (SIGTERM) to kill -9 <PID> (SIGKILL).<br>**AR:** التدرج من الإغلاق الآمن kill -15 إلى الإيقاف الفوري kill -9 عند الضرورة. |
+<details>
+<summary><b>Click to expand Challenges & Solutions</b></summary>
+
+| Challenge | Solution |
+| :--- | :--- |
+| `apt list` warning polluting script output | Redirected stderr to null (`apt list --installed 2>/dev/null \| wc -l`). |
+| Terminal blocked by long-running process | Ran asynchronously in background using `&` and managed with `jobs` / `fg`. |
+| Unresponsive process ignoring normal close | Escalated from `kill -15 <PID>` (`SIGTERM`) to `kill -9 <PID>` (`SIGKILL`). |
+
+</details>
 
 ---
 
-## ☁️ Why It Matters for Cloud Engineers / لماذا يهم هذا مهندسي السحابة؟
-- **EN:** In production AWS EC2 servers, diagnosing high CPU spikes, automating health reports, and patching packages cleanly without leaving orphaned dependencies are core daily responsibilities of a Cloud/DevOps Engineer.
-- **AR:** في خوادم الإنتاج السحابية (AWS EC2)، يُعد تشخيص الارتفاع المفاجئ في استهلاك المعالج، وأتمتة تقارير الفحص، وتحديث الحزم بأمان دون ترك ملفات مهملة من أهم المهام اليومية لمهندس السحابة.
-
----
-
-## 🔗 Project & Resource Links / روابط المشروع والمرجع
+## 5. Verification & Results
+- **Generated Deliverables:** `admin-toolkit/sysinfo.sh`, `admin-toolkit/report.txt`, and `linux-lab3/folder-report.txt`.
 - **NextWork Reference:** [NextWork Level 3: Software & Processes](https://nextwork.ai/refreshed_olive_vibrant_plum/docs/fdb1eb2a-54bf-49d7-baf8-a214e82405e2)
-- **GitHub Repository:** [Hisoka Cloud & DevOps Portfolio](https://github.com/ibrahim-a-elsayed-eng)
 
 ---
-*Documented and verified with precision by Ibrahim Ahmed Elsayed.*
+
+## 6. Key Engineering Takeaways
+- **Clean Telemetry Pipelines:** Suppressing expected CLI warnings with `2>/dev/null` keeps downstream metrics (`wc -l`) accurate.
+- **Graceful First:** `SIGTERM` lets applications flush state and close sockets cleanly; `SIGKILL` is the last resort.

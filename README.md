@@ -1,64 +1,89 @@
-<img width="2814" height="1536" alt="Gemini_Generated_Image_935sav935sav935s" src="https://github.com/user-attachments/assets/77474a49-580b-4376-9e5a-206693c5b0aa" />
+<div align="center">
 
-# 🚀 Cloud & DevOps Engineering Journey | رحلة هندسة السحابة وعمليات التطوير
+<img width="2814" height="1536" alt="Linux Basics Journey Banner" src="https://github.com/user-attachments/assets/77474a49-580b-4376-9e5a-206693c5b0aa" />
 
-[![Linux](https://img.shields.io/badge/OS-Ubuntu%20Linux%20WSL2-orange?style=for-the-badge&logo=ubuntu)](https://ubuntu.com/wsl)
-[![AWS](https://img.shields.io/badge/Cloud-AWS%20Certified%20Track-232F3E?style=for-the-badge&logo=amazonwebservices&logoColor=white)](https://aws.amazon.com/)
-[![Bash](https://img.shields.io/badge/Shell-Bash%20Scripting-4EAA25?style=for-the-badge&logo=gnu-bash&logoColor=white)](https://www.gnu.org/software/bash/)
-[![Security](https://img.shields.io/badge/Security-Least%20Privilege%20%26%20Hardening-red?style=for-the-badge&logo=securityscorecard)](https://aws.amazon.com/iam/)
-[![Status](https://img.shields.io/badge/Status-7%20Projects%20Completed%20%E2%9C%85-brightgreen?style=for-the-badge)]()
+# Linux & DevOps Engineering Journey (7 Hands-On Projects)
 
-> **Engineer:** **إبراهيم أحمد السيد (Ibrahim Ahmed Elsayed — Hisoka)**  
-> **Role:** Cloud & DevOps Engineer | Remote Work Aspirant  
-> **Learning Platform:** [NextWork.ai Cloud Community](https://nextwork.ai) & Official AWS Architecture Framework
+![Linux](https://img.shields.io/badge/OS-Ubuntu%20WSL2-FF9900?style=for-the-badge&logo=ubuntu&logoColor=white)
+![Bash](https://img.shields.io/badge/Shell-Bash%20Scripting-0EA5E9?style=for-the-badge&logo=gnubash&logoColor=white)
+![Security](https://img.shields.io/badge/Security-Hardening%20%26%20DAC-10B981?style=for-the-badge)
+![Status](https://img.shields.io/badge/Projects-7%20Completed-0F172A?style=for-the-badge)
 
----
+**Seven progressive Ubuntu Linux & Bash engineering labs covering CLI fundamentals, permission governance, process control, networking, cron/logrotate, and systemd hardening.**
 
-## 🌟 Executive Summary / نظرة عامة تنفيذية
-* **EN:** Welcome to my production-oriented Cloud & DevOps portfolio repository. This space documents my hands-on transition from deep Linux kernel and system administration fundamentals to automated cloud infrastructure, server hardening, and enterprise telemetry. Every milestone is built following the Principle of Least Privilege and verified with comprehensive bilingual engineering documentation.
-* **AR:** مرحباً بك في مستودع مشاريع هندسة السحابة وعمليات التطوير (Cloud & DevOps). يوثق هذا المستودع تطبيقي العملي من الصفر في إدارة أنظمة لينكس، وأتمتة البنية التحتية، وتأمين الخوادم، ومراقبة موارد الأنظمة. تم بناء وتوثيق كل مشروع بمعايير هندسية صارمة وفق مبدأ الحد الأدنى من الصلاحيات (Least Privilege).
+</div>
 
 ---
 
-## 📚 Completed Projects Matrix / مصفوفة المشاريع المكتملة
+## 1. Architecture Overview
 
-| # | Project / المشروع | Core Tech / التقنيات الأساسية | Key Deliverable / المخرج الهندسي | Documentation / التوثيق |
+```mermaid
+flowchart LR
+    P1["01 Linux Basics\nCLI & Text Filtering"] --> P2["02 Control Your System\nchmod / chown / chgrp"]
+    P2 --> P3["03 Software & Processes\napt / ps / signals"]
+    P3 --> P4["04 Network & Health\nsystemd / ss / sysdash"]
+    P4 --> P5["05 Bash Scripting\nset -euo pipefail"]
+    P5 --> P6["06 Automate Logs\ncron & logrotate"]
+    P6 --> P7["07 Server Hardening\nSSH / UFW / systemd"]
+```
+
+> [!IMPORTANT]
+> **Key Design Decision:** Built as a structured 7-stage progression on Ubuntu Linux (WSL2), moving from interactive CLI administration to modular, fail-fast Bash automation and sandboxed `systemd` services.
+
+---
+
+## 2. Problem & Solution
+
+| Aspect | Detail |
+| :--- | :--- |
+| **Problem** | Cloud and DevOps workflows (AWS EC2, CI/CD, troubleshooting) fail quickly without strong Linux internals, permission discipline, and automation skills. |
+| **Solution** | Completed 7 hands-on projects spanning filesystem navigation, DAC permissions, package/process governance, socket & health auditing, Bash scripting, `cron`/`logrotate`, and `systemd` hardening. |
+| **Documentation Standard** | Root matrix links to each subproject's dedicated `README.md`, scripts, configs, and [cheatsheet.md](./cheatsheet.md). |
+
+---
+
+## 3. Tech Stack
+- **Operating System:** Ubuntu Linux (WSL2)
+- **Shell & Scripting:** GNU Bash (`set -euo pipefail`, `bash -n`, `bash -x`), `tar`/`gzip`
+- **Networking & Services:** `systemd` (`systemctl`/`journalctl`), `ss -tuln`, `curl -I`, `ssh`, `ufw`
+- **Security & Automation:** Linux DAC (`chmod`, `chown`, `chgrp`, `sudo`), `cron`/`crontab`, `logrotate`
+
+---
+
+## 4. Implementation Steps (7-Project Matrix)
+
+| # | Project | Core Tech | Key Deliverable | Documentation |
 | :-: | :--- | :--- | :--- | :-: |
-| **01** | **[Linux Basics & Provisioning](./01-linux-basics)** | Ubuntu WSL, CLI Navigation, cat, grep | Filesystem navigation, directory hierarchy, and log filtering. | [📘 Full README](./01-linux-basics/README.md) |
-| **02** | **[Control Your System](./02-control-your-system)** | chmod, chown, chgrp, sudo, Multi-tenancy | Automated system audit script (sysinfo.sh) & least privilege access matrix. | [📘 Full README](./02-control-your-system/README.md) |
-| **03** | **[Software & Processes](./03-software-and-processes/admin-toolkit)** | pt lifecycle, ps aux, htop, SIGTERM/SIGKILL | Non-interactive health telemetry engine & background job control. | [📘 Full README](./03-software-and-processes/admin-toolkit/README.md) |
-| **04** | **[Network, Services & Health](./04-network-services-health)** | systemd, ss -tuln, curl -I, du, df | Server health dashboard (sysdash) & listening socket triage. | [📘 Full README](./04-network-services-health/README.md) |
-| **05** | **[Bash Scripting & Automation](./05-bash-scripting)** | GNU Bash, set -euo pipefail, 	ar/gzip | Modular automation scripts with fail-fast error handling and logging. | [📘 Full README](./05-bash-scripting/README.md) |
-| **06** | **[Automate Logs & Cron](./06-automate-logs-cron)** | cron/crontab, logrotate, log analysis | Automated background maintenance & enterprise log lifecycle policies. | [📘 Full README](./06-automate-logs-cron/README.md) |
-| **07** | **[Server Hardening & Log Monitor](./07-harden-log-monitor)** | Ubuntu WSL, SSH, UFW, Bash, systemd | Training project: general SSH & UFW hardening practice, plus `log-monitor.sh` & hardened `systemd` oneshot service on a demo app log. | [📘 Full README](./07-harden-log-monitor/README.md) |
+| **01** | **[Linux Basics & Provisioning](./01-linux-basics)** | Ubuntu WSL, CLI Navigation, `cat`, `grep` | Filesystem navigation, directory hierarchy, and log filtering | [Project 01 README](./01-linux-basics/README.md) |
+| **02** | **[Control Your System](./02-control-your-system)** | `chmod`, `chown`, `chgrp`, `sudo` | System audit scripts (`sysinfo.sh`, `census.sh`) & least-privilege permissions | [Project 02 README](./02-control-your-system/README.md) |
+| **03** | **[Software & Processes](./03-software-and-processes)** | `apt` lifecycle, `ps aux`, `htop`, `SIGTERM`/`SIGKILL` | Package management & non-interactive health telemetry (`admin-toolkit`) | [Project 03 README](./03-software-and-processes/README.md) |
+| **04** | **[Network, Services & Health](./04-network-services-health)** | `systemd`, `ss -tuln`, `curl -I`, `du`, `df` | Server health dashboard (`sysdash/healthcheck.sh`) & socket triage | [Project 04 README](./04-network-services-health/README.md) |
+| **05** | **[Bash Scripting & Automation](./05-bash-scripting)** | GNU Bash, `set -euo pipefail`, `tar`/`gzip` | Modular scripts (`backup.sh`, `sysreport.sh`) with fail-fast handling | [Project 05 README](./05-bash-scripting/README.md) |
+| **06** | **[Automate Logs & Cron](./06-automate-logs-cron)** | `cron`/`crontab`, `logrotate`, log analysis | Automated `logwatch.sh` scheduling & log rotation policies | [Project 06 README](./06-automate-logs-cron/README.md) |
+| **07** | **[Server Hardening & Log Monitor](./07-harden-log-monitor)** | Ubuntu WSL, SSH, UFW, Bash, `systemd` | SSH & UFW practice + `log-monitor.sh` running under sandboxed `systemd` | [Project 07 README](./07-harden-log-monitor/README.md) |
 
----
+<details>
+<summary><b>Click to expand Global Technical Stack Tree</b></summary>
 
-## 🛠️ Global Technical Stack / التقنيات والأدوات المستخدمة
-
-`	ext
-├── Operating Systems:   Ubuntu Linux (WSL2), Debian, RedHat/CentOS basics
+```text
+├── Operating Systems:   Ubuntu Linux (WSL2)
 ├── Shell & Scripting:   GNU Bash (Modular Automation, Error Trapping, Cron Schedulers)
-├── Networking & Ports:  TCP/IP, DNS, HTTP/HTTPS, SSH, ss/netstat, curl, OpenSSL
+├── Networking & Ports:  TCP/IP, DNS, HTTP/HTTPS, SSH, ss, curl
 ├── Process & Daemons:   systemd (systemctl/journalctl), Signals (SIGTERM/SIGKILL), htop
-├── Security & Access:   Linux DAC (chmod/chown/chgrp), Sudoers Governance, UFW, Fail2ban
-├── Cloud & Automation:  AWS Architecture (EC2, S3, IAM, VPC), Terraform (IaC Basics)
-└── Version Control:     Git & GitHub Workflow (Bilingual Documentation & Release Tracking)
-`
+├── Security & Access:   Linux DAC (chmod/chown/chgrp), sudo, UFW, SSH Hardening
+└── Version Control:     Git & GitHub
+```
+
+</details>
 
 ---
 
-## 🎯 Engineering Mindset & Principles / المبادئ الهندسية المتبعة
-1. **Security First (Defense-in-Depth):** Never expose root credentials; apply the Principle of Least Privilege across files, firewalls, and cloud identities (IAM).
-2. **Automate Everything:** Transition repetitive terminal tasks into idempotent, clean Bash and Python automation tools with structured logging.
-3. **Discipline in Documentation:** Code without clear, reproducible documentation is tech debt. Every project contains bilingual overviews and practical challenges & root-cause resolutions.
+## 5. Verification & Results
+- All 7 subprojects include hands-on scripts, reports, and challenge logs verified on Ubuntu WSL2.
+- Quick CLI reference maintained in [cheatsheet.md](./cheatsheet.md).
 
 ---
 
-## 👨‍💻 Connect with Me / تواصل معي
-* **Name:** Ibrahim Ahmed Elsayed (Hisoka)
-* **GitHub Profile:** [@ibrahim-a-elsayed-eng](https://github.com/ibrahim-a-elsayed-eng)
-* **Community:** Active member of the [NextWork.ai](https://nextwork.ai) Cloud & DevOps Engineering Cohort
-
----
-*Maintained & verified with engineering rigor by Ibrahim Ahmed Elsayed.*
+## 6. Key Engineering Takeaways
+- **Defense-in-Depth:** Apply least privilege across files (`chmod 700/750`), `sudo`, firewall rules (`UFW`), and `systemd` service sandboxing.
+- **Automate Safely:** Combine `set -euo pipefail`, absolute paths in `cron`, and dry-run checks (`bash -n`, `logrotate -d`) before production execution.

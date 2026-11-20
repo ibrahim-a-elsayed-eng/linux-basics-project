@@ -1,34 +1,56 @@
-# 🔒 Project 7: Server Hardening & Log Monitor | تأمين الخادم ومراقب السجلات
+<div align="center">
 
-> Prepared & Documented by: **إبراهيم أحمد السيد (Ibrahim Ahmed Elsayed)** — Cloud & DevOps Engineering Journey.
+# Project 7: Server Hardening & Log Monitor
 
----
+![Linux](https://img.shields.io/badge/OS-Ubuntu%20WSL-FF9900?style=for-the-badge&logo=ubuntu&logoColor=white)
+![Systemd](https://img.shields.io/badge/Service-systemd%20Sandboxed-0EA5E9?style=for-the-badge)
+![Security](https://img.shields.io/badge/Hardening-SSH%20%7C%20UFW%20%7C%20Least%20Privilege-10B981?style=for-the-badge)
+![Cost](https://img.shields.io/badge/Lab%20Cost-%240%20Local%20WSL-0F172A?style=for-the-badge)
 
-## 🌟 Overview / نظرة عامة
-- **EN:** This is a training project on Ubuntu WSL. I practiced general SSH hardening and UFW firewall rules, and built a Bash script (`log-monitor.sh`) that monitors a demo application log (`/var/log/demo-app/application.log`) and runs as a hardened `systemd` oneshot service (`log-monitor.service`) under a dedicated user.
-- **AR:** هذا مشروع تدريبي على بيئة Ubuntu WSL. تدرّبت فيه على تأمين SSH وقواعد جدار الحماية UFW بشكل عام، وكتبت سكربت Bash (`log-monitor.sh`) لمراقبة سجل تطبيق تجريبي (`/var/log/demo-app/application.log`)، وتشغيله كخدمة `systemd` من نوع `oneshot` (`log-monitor.service`) تحت مستخدم مخصص مع خيارات عزل وحماية.
+**Ubuntu WSL training project: SSH & UFW hardening practice plus `log-monitor.sh` running as a sandboxed `systemd` oneshot service under user `log-monitor`.**
 
----
-
-## 🎯 Objectives / الأهداف
-- **EN:**
-  - Practice basic SSH hardening and UFW firewall rules on Ubuntu WSL.
-  - Write `log-monitor.sh` to read the last 200 lines of `/var/log/demo-app/application.log`, count lines with `level=WARN` and `level=ERROR`, write a summary line to `/var/log/log-monitor/report.log`, and print an `ALERT` message if there is at least one `ERROR`.
-  - Run the script as a `systemd` oneshot service (`log-monitor.service`) under a dedicated user `log-monitor` with strict sandboxing options.
-- **AR:**
-  - التدرب على أساسيات تأمين SSH وقواعد جدار الحماية UFW على Ubuntu WSL.
-  - كتابة سكربت `log-monitor.sh` لقراءة آخر 200 سطر من `/var/log/demo-app/application.log`، وعدّ الأسطر التي تحتوي على `level=WARN` و`level=ERROR`، وكتابة سطر ملخص في `/var/log/log-monitor/report.log`، وطباعة رسالة `ALERT` عند وجود `ERROR` واحد على الأقل.
-  - تشغيل السكربت كخدمة `systemd` من نوع `oneshot` (`log-monitor.service`) تحت المستخدم المخصص `log-monitor` مع خيارات عزل وحماية.
+</div>
 
 ---
 
-## 🛠️ Technologies Used / التقنيات المستخدمة
-- **EN:** `Ubuntu WSL` | `SSH` | `UFW` | `Bash` | `systemd`
-- **AR:** `Ubuntu WSL` | `SSH` | `UFW` | `Bash` | `systemd`
+## 1. Architecture Overview
+
+```mermaid
+flowchart LR
+    AppLog["/var/log/demo-app/application.log\n(ConditionPathExists)"] --> Svc["systemd: log-monitor.service\nType=oneshot | User=log-monitor"]
+    Svc --> Script["scripts/log-monitor.sh\ntail -n 200 | grep WARN/ERROR"]
+    Script --> Report["/var/log/log-monitor/report.log\n+ ALERT to stderr if errors > 0"]
+```
+
+> [!IMPORTANT]
+> **Key Design Decision:** Rather than running `log-monitor.sh` as `root`, `log-monitor.service` executes under a dedicated unprivileged `log-monitor` user/group with strict `systemd` sandboxing (`NoNewPrivileges`, `ProtectSystem=strict`, `ProtectHome=yes`, `PrivateTmp=yes`, `PrivateDevices=yes`, `UMask=0027`).
 
 ---
 
-## 📜 Script: `scripts/log-monitor.sh`
+## 2. Problem & Solution
+
+| Aspect | Detail |
+| :--- | :--- |
+| **Problem** | Monitoring scripts often run with excessive `root` privileges, while default SSH/firewall configs leave unnecessary attack surface. |
+| **Solution** | Practiced SSH (`config/sshd-hardening.conf`) and UFW firewall rules, wrote `log-monitor.sh` to scan the last 200 lines for `level=WARN`/`level=ERROR`, and ran it via a hardened `systemd` oneshot service (+ timer/path/logrotate configs). |
+| **Security Boundary** | Dedicated `log-monitor` user, `LogsDirectoryMode=0750`, `UMask=0027`, and kernel/filesystem protections (`ProtectSystem=strict`, `ProtectHome=yes`, `ProtectKernelTunables=yes`, `ProtectKernelModules=yes`, `ProtectControlGroups=yes`). |
+
+---
+
+## 3. Tech Stack
+- **Operating System:** Ubuntu Linux (WSL)
+- **Hardening & Firewall:** OpenSSH (`config/sshd-hardening.conf`), UFW
+- **Automation & Service Control:** GNU Bash (`scripts/log-monitor.sh`), `systemd` (`log-monitor.service`, `log-monitor.timer`, `log-monitor.path`), `logrotate` (`config/log-monitor.logrotate`)
+
+---
+
+## 4. Implementation Steps (Summary)
+1. Practiced general SSH hardening (`config/sshd-hardening.conf`) and UFW firewall rules on Ubuntu WSL.
+2. Wrote `scripts/log-monitor.sh` (`set -euo pipefail`) to tail the last 200 lines of `/var/log/demo-app/application.log`, count `level=WARN` and `level=ERROR`, append a timestamped summary to `/var/log/log-monitor/report.log`, and emit `ALERT` on `stderr` when `error_count > 0`.
+3. Configured `config/log-monitor.service` (`Type=oneshot`, `User=log-monitor`, `Group=log-monitor`) along with timer, path, and logrotate configs.
+
+<details>
+<summary><b>Click to expand scripts/log-monitor.sh & config/log-monitor.service</b></summary>
 
 ```bash
 #!/usr/bin/env bash
@@ -56,13 +78,6 @@ if (( error_count > 0 )); then
 fi
 ```
 
----
-
-## ⚙️ Systemd Service: `config/log-monitor.service`
-
-Runs as `Type=oneshot` under user/group `log-monitor` with these hardening options:
-`NoNewPrivileges`, `PrivateTmp`, `PrivateDevices`, `ProtectSystem=strict`, `ProtectHome`, `ProtectKernelTunables`, `ProtectKernelModules`, `ProtectControlGroups`, `UMask=0027`.
-
 ```ini
 [Unit]
 Description=Scan the demo application log for warnings and errors
@@ -88,10 +103,15 @@ ProtectKernelModules=yes
 ProtectControlGroups=yes
 ```
 
----
-
-## 🔗 Project & Resource Links / روابط المشروع والمرجع
-- **GitHub Profile:** [ibrahim-a-elsayed-eng](https://github.com/ibrahim-a-elsayed-eng)
+</details>
 
 ---
-*Documented by Ibrahim Ahmed Elsayed.*
+
+## 5. Verification & Results
+- **Deliverables:** `scripts/log-monitor.sh`, `config/log-monitor.service`, `config/log-monitor.timer`, `config/log-monitor.path`, `config/log-monitor.logrotate`, `config/sshd-hardening.conf`, and [challenges.md](./challenges.md).
+
+---
+
+## 6. Key Engineering Takeaways
+- **Sandboxed Daemons:** Modern `systemd` directives (`ProtectSystem=strict`, `NoNewPrivileges`, dedicated service users) sharply reduce blast radius if a script is ever compromised.
+- **Explicit Preconditions:** `ConditionPathExists` and `[[ ! -r "$source_log" ]]` fail cleanly with clear diagnostics instead of crashing obscurely.
