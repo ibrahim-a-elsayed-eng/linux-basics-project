@@ -4,7 +4,7 @@
 
 ![Linux](https://img.shields.io/badge/OS-Ubuntu%20WSL-FF9900?style=for-the-badge&logo=ubuntu&logoColor=white)
 ![Bash](https://img.shields.io/badge/Language-GNU%20Bash-0EA5E9?style=for-the-badge&logo=gnubash&logoColor=white)
-![Safety](https://img.shields.io/badge/Safety-set%20-euo%20pipefail-10B981?style=for-the-badge)
+![Safety](https://img.shields.io/badge/Safety-set%20--euo%20pipefail-10B981?style=for-the-badge)
 ![Cost](https://img.shields.io/badge/Lab%20Cost-%240%20Local%20WSL-0F172A?style=for-the-badge)
 
 **Modular Bash automation scripts (`backup.sh`, `sysreport.sh`, `checkfile.sh`) using `set -euo pipefail`, CLI arguments, and `bash -n`/`bash -x` debugging.**
