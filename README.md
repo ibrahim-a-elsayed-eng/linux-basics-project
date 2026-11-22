@@ -1,6 +1,6 @@
 <div align="center">
 
-<img width="2814" height="1536" alt="Linux Basics Journey Banner" src="https://github.com/user-attachments/assets/77474a49-580b-4376-9e5a-206693c5b0aa" />
+<img alt="Linux & DevOps Engineering Journey Architecture Diagram" src="./images/linux_devops_7labs_architecture.jpg" />
 
 # Linux & DevOps Engineering Journey (7 Hands-On Projects)
 
