@@ -1,7 +1,5 @@
 <div align="center">
 
-<img alt="Linux & DevOps Engineering Journey Architecture Diagram" src="./images/linux_devops_7labs_architecture.jpg" />
-
 # Linux & DevOps Engineering Journey (7 Hands-On Projects)
 
 ![Linux](https://img.shields.io/badge/OS-Ubuntu%20WSL2-FF9900?style=for-the-badge&logo=ubuntu&logoColor=white)
@@ -16,6 +14,8 @@
 ---
 
 ## 1. Architecture Overview
+
+![Architecture Diagram](./images/linux_devops_7labs_architecture.jpg)
 
 ```mermaid
 flowchart LR
@@ -84,6 +84,18 @@ flowchart LR
 
 ---
 
-## 6. Key Engineering Takeaways
+## 6. Troubleshooting & Fixes
+- **Issue:** `systemd` services and `cron` jobs can fail silently when scripts rely on relative paths, `root` ownership, or missing log directories/files.
+- **Root Cause & Fix:** Enforced `set -euo pipefail`, absolute paths, pre-execution dry-runs (`bash -n`, `logrotate -d`), `ConditionPathExists`, and dedicated unprivileged `log-monitor` ownership (`LogsDirectoryMode=0750`, `UMask=0027`).
+
+---
+
+## 7. Cost & Teardown Verification ($0.00)
+- [x] All 7 labs executed locally on Ubuntu Linux (WSL2) with `$0.00` cloud spend.
+- [x] No billable AWS compute or networking resources provisioned.
+
+---
+
+## 8. Key Engineering Takeaways
 - **Defense-in-Depth:** Apply least privilege across files (`chmod 700/750`), `sudo`, firewall rules (`UFW`), and `systemd` service sandboxing.
 - **Automate Safely:** Combine `set -euo pipefail`, absolute paths in `cron`, and dry-run checks (`bash -n`, `logrotate -d`) before production execution.
